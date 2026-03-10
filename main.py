@@ -28,6 +28,11 @@ def main():
 	asteroid_field = AsteroidField()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> collisions
 =======
 
 
