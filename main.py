@@ -27,16 +27,6 @@ def main():
 	AsteroidField.containers = (updatable)
 	asteroid_field = AsteroidField()
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-
->>>>>>> collisions
-=======
-
-
->>>>>>> collisions
 	while True:
 		log_state()
 
