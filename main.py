@@ -32,6 +32,8 @@ def main():
 	AsteroidField.containers = (updatable)
 	asteroid_field = AsteroidField()
 
+
+
 	while True:
 		log_state()
 
