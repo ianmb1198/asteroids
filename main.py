@@ -1,9 +1,10 @@
 import pygame
+import sys
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import *
-from logger import log_state
+from logger import log_state, log_event
 
 def main():
 	print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -26,6 +27,11 @@ def main():
 	AsteroidField.containers = (updatable)
 	asteroid_field = AsteroidField()
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> collisions
 	while True:
 		log_state()
 
@@ -34,6 +40,13 @@ def main():
 				return
 
 		updatable.update(dt)
+
+		#Collision check
+		for asteroid in asteroids:
+			if asteroid.collides_with(player):
+				log_event("player_hit")
+				print("Game over!")
+				sys.exit()
 
 		screen.fill("black")
 
