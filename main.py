@@ -26,6 +26,14 @@ def main():
 	AsteroidField.containers = (updatable)
 	asteroid_field = AsteroidField()
 
+	asteroids = pygame.sprite.Group()
+	Asteroid.containers = (asteroids, updatable, drawable)
+
+	AsteroidField.containers = (updatable)
+	asteroid_field = AsteroidField()
+
+
+
 	while True:
 		log_state()
 
