@@ -6,6 +6,7 @@ from shot import Shot
 from asteroidfield import AsteroidField
 from constants import *
 from logger import log_state, log_event
+from score import Score
 
 def main():
 	print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -31,6 +32,9 @@ def main():
 	shots = pygame.sprite.Group()
 	Shot.containers = (shots, updatable, drawable)
 
+	score_keeper = Score(10, 10)
+	total_points = 0
+
 	#Game Loop
 	while True:
 		log_state()
@@ -46,6 +50,7 @@ def main():
 			if asteroid.collides_with(player):
 				log_event("player_hit")
 				print("Game over!")
+				print(f"Score: {total_points}")
 				sys.exit()
 
 		#Second collision check
@@ -53,6 +58,9 @@ def main():
 			for shot in shots:
 				if asteroid.collides_with(shot):
 					log_event("asteroid_shot")
+					points = 100 if asteroid.radius > ASTEROID_MIN_RADIUS else 250
+					score_keeper.increment(points)
+					total_points += points
 					asteroid.split()
 					shot.kill()
 
@@ -60,6 +68,8 @@ def main():
 
 		for obj in drawable:
 			obj.draw(screen)
+
+		score_keeper.draw(screen)
 
 		pygame.display.flip()
 
