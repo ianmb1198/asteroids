@@ -6,3 +6,7 @@ class Score:
 		self.x = x
 		self.y = y
 		self.font = pygame.font.SysFont("monospace", 35)
+
+	#Method to increment score.
+	def increment(self, points):
+		self.value += points
