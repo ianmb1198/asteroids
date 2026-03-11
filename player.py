@@ -33,12 +33,25 @@ class Player(CircleShape):
 		self.position += rotated_with_speed_vector
 
 	def shoot(self):
+		#Prevent shooting if cooldown is active:
+		if self.shot_cooldown_timer > 0:
+			return
+
+		#Create new shot at current position of player and shoot it in the direction the player is facing at set velocity.
 		shot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
-		velocity = pygame.Vector2(0, 1)
-		velocity = velocity.rotate(self.rotation)
+		velocity = pygame.Vector2(0, 1).rotate(self.rotation)
 		shot.velocity = velocity * PLAYER_SHOOT_SPEED
 
+		#Reset cooldown timer
+		self.shot_cooldown_timer = PLAYER_SHOOT_COOLDOWN_SECONDS
+
+
 	def update(self, dt):
+
+		#Decrease cooldown timer at dt (capped at 0).
+		if self.shot_cooldown_timer > 0:
+			self.shot_cooldown_timer -= dt
+
 		keys = pygame.key.get_pressed()
 
 		if keys[pygame.K_a]:
@@ -55,5 +68,3 @@ class Player(CircleShape):
 
 		if keys[pygame.K_SPACE]:
 			self.shoot()
-
-
