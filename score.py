@@ -10,3 +10,11 @@ class Score:
 	#Method to increment score.
 	def increment(self, points):
 		self.value += points
+
+	#Method to draw a score surface on the main screen.
+	def draw(self, screen):
+		#Render creates a new Surface with the text on it.
+		score_surface = self.font.render(f"Score: {self.value}", True, (255, 255, 255))
+
+		#Blit draws that surface on the main screen.
+		screen.blit(score_surface, (self.x, self.y))
