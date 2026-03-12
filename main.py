@@ -4,6 +4,7 @@ from player import Player
 from asteroid import Asteroid
 from shot import Shot
 from asteroidfield import AsteroidField
+from lives import Lives
 from constants import *
 from logger import log_state, log_event
 from score import Score
@@ -45,6 +46,9 @@ def main():
 	score_keeper = Score(10, 10)
 	total_points = 0
 
+	#Initialize the UI for tracking and displaying the total lives the player has.
+	life_manager = Lives(3, 10, 50)	#Starting with 3 lives, positioned below score.
+
 	#--- Game Loop ---#
 	while True:
 		#Log the current game state for debugging.
@@ -62,9 +66,18 @@ def main():
 		for asteroid in asteroids:
 			if asteroid.collides_with(player):
 				log_event("player_hit")
-				print("Game over!")
-				print(f"Score: {total_points}")
-				sys.exit()
+				#Respawn logic: reset player to center
+				if life_manager.decrease():
+					player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+					player.velocity = pygame.Vector2(0, 0)
+					#Clear nearby asteroids to prevent instant death upon reset.
+					for a in asteroids:
+						if a.position.distance_to(player.position) < 200:
+							a.kill()
+				else:
+					print("Game over!")
+					print(f"Score: {total_points}")
+					sys.exit()
 
 		#Collision Check: Asteroid vs Shot (Bullets)
 		for asteroid in asteroids:
@@ -86,6 +99,9 @@ def main():
 
 		#Draw the score overlay.
 		score_keeper.draw(screen)
+
+		#Draw the life overlay.
+		life_manager.draw(screen)
 
 		#Update the actual display monitor.
 		pygame.display.flip()
