@@ -4,7 +4,7 @@ from player import Player
 from asteroid import Asteroid
 from shot import Shot
 from asteroidfield import AsteroidField
-from lives import Lives
+from lives import Lives #remove after merge
 from constants import *
 from logger import log_state, log_event
 from score import Score
