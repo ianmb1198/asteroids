@@ -12,5 +12,5 @@ class Lives:
 		return self.amount > 0
 
 	def draw(self, screen):
-		lives_surface = self.font.reader(f"Lives: {self.amount}", True, (255, 255, 255))
+		lives_surface = self.font.render(f"Lives: {self.amount}", True, (255, 255, 255))
 		screen.blit(lives_surface, (self.x, self.y))
