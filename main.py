@@ -9,43 +9,56 @@ from logger import log_state, log_event
 from score import Score
 
 def main():
+	#Print basic game info to the console on startup.
 	print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
 	print(f"Screen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
+
+	#Initialize all imported pygame modules.
 	pygame.init()
+
+	#Create the game window and the internal clock for managing framerate.
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	clock = pygame.time.Clock()
+
+	#Delta time (dt) tracks the time passed between frames for smooth movement.
 	dt = 0
 
-	updatable = pygame.sprite.Group()
-	drawable = pygame.sprite.Group()
+	#Groups allow us to update or draw multiple objects at once.
+	updatable = pygame.sprite.Group()	#For movement and logic.
+	drawable = pygame.sprite.Group()	#For rendering to the screen.
 
+	#Assign groups to class containers so new objects add themselves automatically.
 	Player.containers = (updatable, drawable)
 	player = Player(x=SCREEN_WIDTH / 2, y=SCREEN_HEIGHT /2)
 
+	#Setup asteroid groups and the manager that spans them.
 	asteroids = pygame.sprite.Group()
 	Asteroid.containers = (asteroids, updatable, drawable)
-
 	AsteroidField.containers = (updatable)
 	asteroid_field = AsteroidField()
 
-	#Set up new shots group and the containers field to include the group with drawable and updateble containers.
+	#Setup shot (bullet) groups and containers.
 	shots = pygame.sprite.Group()
 	Shot.containers = (shots, updatable, drawable)
 
+	#Initialize the UI for tracking and displaying the score.
 	score_keeper = Score(10, 10)
 	total_points = 0
 
-	#Game Loop
+	#--- Game Loop ---#
 	while True:
+		#Log the current game state for debugging.
 		log_state()
 
+		#Check for window events (like clicking the "X" to close).
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				return
 
+		#Move and update all objects based on the time passed (dt)
 		updatable.update(dt)
 
-		#Collision check
+		#Collision Check: Asteroid vs Player.
 		for asteroid in asteroids:
 			if asteroid.collides_with(player):
 				log_event("player_hit")
@@ -53,7 +66,7 @@ def main():
 				print(f"Score: {total_points}")
 				sys.exit()
 
-		#Second collision check
+		#Collision Check: Asteroid vs Shot (Bullets)
 		for asteroid in asteroids:
 			for shot in shots:
 				if asteroid.collides_with(shot):
@@ -64,17 +77,22 @@ def main():
 					asteroid.split()
 					shot.kill()
 
-		screen.fill("black")
+		##--- Rendering Section ---##
+		screen.fill("black")	#Clear the screen with black.
 
+		#Draw every object in the drawable group.
 		for obj in drawable:
 			obj.draw(screen)
 
+		#Draw the score overlay.
 		score_keeper.draw(screen)
 
+		#Update the actual display monitor.
 		pygame.display.flip()
 
+		#Limit framerate to 60 FPS and calculate delta time (dt)
 		dt = clock.tick(60) / 1000
 
-
+#Entry point check
 if __name__ == "__main__":
     main()
